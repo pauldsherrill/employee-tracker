@@ -60,9 +60,10 @@ inquirer.prompt([
                 name: 'rolesalary'
             },
             {
-                type: 'input',
+                type: 'list',
                 message: 'Which department does the role belong to?',
-                name: 'roledepartment'
+                name: 'roledepartment',
+                choices: []
             }
         ]).then((roleAnswers) => {
             pool.query(`INSERT INTO roles (name) VALUES $1`, [roleAnswers.rolename], (err, {rows}) => {
