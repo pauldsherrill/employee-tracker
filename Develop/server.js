@@ -46,7 +46,7 @@ inquirer.prompt([
                 console.log(rows);
                 console.log('Added department!');
             });
-        })
+        });
     } else if (answers.action == 'Add a role') {
         inquirer.prompt([
             {
@@ -64,32 +64,72 @@ inquirer.prompt([
                 message: 'Which department does the role belong to?',
                 name: 'roledepartment'
             }
-        ]);
-        console.log('Added role!');
+        ]).then((roleAnswers) => {
+            pool.query(`INSERT INTO roles (name) VALUES $1`, [roleAnswers.rolename], (err, {rows}) => {
+                if (err) {
+                  console.log(err);
+                }
+            });
+            pool.query(`INSERT INTO roles (salary) VALUES $1`, [roleAnswers.rolesalary], (err, {rows}) => {
+                if (err) {
+                  console.log(err);
+                }
+            });
+            pool.query(`INSERT INTO roles (department) VALUES $1`, [roleAnswers.roledepartment], (err, {rows}) => {
+                if (err) {
+                  console.log(err);
+                }
+            });
+            console.log(rows);
+            console.log('Added role!');
+        });
     } else if (answers.action == 'Add an employee') {
         inquirer.prompt([
             {
                 type: 'input',
-                message: "What is employee's first name?",
+                message: "What is the employee's first name?",
                 name: 'firstname'
             },
             {
                 type: 'input',
-                message: "What is employee's last name?",
+                message: "What is the employee's last name?",
                 name: 'lastname'
             },
             {
-                type: 'input',
-                message: "What is employee's role?",
-                name: 'employeerole'
+                type: 'list',
+                message: "What is the employee's role?",
+                name: 'employeerole',
+                choices: []
             },
             {
                 type: 'input',
                 message: "Who is the employee's manager?",
                 name: 'employeemanager'
             }
-        ]);
-        console.log('Added employee!');
+        ]).then((employeeAnswers) => {
+            pool.query(`INSERT INTO employees (first_name) VALUES $1`, [employeeAnswers.firstname], (err, {rows}) => {
+                if (err) {
+                  console.log(err);
+                }
+            });
+            pool.query(`INSERT INTO employees (last_name) VALUES $1`, [employeeAnswers.lastname], (err, {rows}) => {
+                if (err) {
+                  console.log(err);
+                }
+            });
+            pool.query(`INSERT INTO employees (role_id) VALUES $1`, [employeeAnswers.employeerole], (err, {rows}) => {
+                if (err) {
+                  console.log(err);
+                }
+            });
+            pool.query(`INSERT INTO employees (manager_id) VALUES $1`, [employeeAnswers.employeemanager], (err, {rows}) => {
+                if (err) {
+                  console.log(err);
+                }
+            });
+            console.log(rows);
+            console.log('Added employee!');
+        });
     } else if (answers.action == 'Update an employee role') {
         inquirer.prompt([
             {
@@ -108,3 +148,5 @@ pool.connect();
 app.listen(PORT, () => {
     console.log('Hey you did it!')
 });
+
+findAll
