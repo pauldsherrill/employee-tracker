@@ -1,8 +1,9 @@
 const express = require('express');
+const inquirer = require('inquirer');
 const { Pool } = require('pg');
 
 const app = express();
-const PORT = port.env.PORT || 3001;
+const PORT = 3001;
 
 const pool = new Pool({
     host: 'localhost',
@@ -24,11 +25,11 @@ inquirer.prompt([
             console.log(rows);
           });
     } else if (answers.action == 'View all roles') {
-        pool.query('SELECT * FROM roles', function (err, {rows}) {
+        pool.query('SELECT roles.title, departments.name AS department, roles.salary FROM roles JOIN departments ON roles.department = departments.id;', function (err, {rows}) {
             console.log(rows);
           });
     } else if (answers.action == 'View all employees') {
-        pool.query('SELECT * FROM employees', function (err, {rows}) {
+        pool.query('SELECT employees.first_name, employees.last_name, roles.title AS role, roles.salary AS salary, employees.manager FROM employees JOIN roles ON employees.role_id = roles.id;', function (err, {rows}) {
             console.log(rows);
           });
     } else if (answers.action == 'Add a department') {
@@ -149,5 +150,3 @@ pool.connect();
 app.listen(PORT, () => {
     console.log('Hey you did it!')
 });
-
-findAll

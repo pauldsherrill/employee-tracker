@@ -15,13 +15,19 @@ VALUES ('Sales Lead', 100000, 1),
        ('Lawyer', 150000, 4);
 
 INSERT INTO employees (first_name, last_name, role_id, manager)
-VALUES ('Jim', 'Halpert', 1, 'None'),
-       ('Dwight', 'Schrute', 2, 'Jim Halpert'),
-       ('Ashley', 'Rodriguez', 3, 'None'),
-       ('Kevin', 'Tupik', 4, 'Ashley Rodriguez'),
-       ('Oscar', 'Martinez', 5, 'None'),
-       ('Kevin', 'Malone', 6, 'Oscar Martinez');
+VALUES  ('Jim', 'Halpert', 1, 'None'),
+        ('Dwight', 'Schrute', 2, 'Jim Halpert'),
+        ('Ashley', 'Rodriguez', 3, 'None'),
+        ('Kevin', 'Tupik', 4, 'Ashley Rodriguez'),
+        ('Oscar', 'Martinez', 5, 'None'),
+        ('Kevin', 'Malone', 6, 'Oscar Martinez');
 
-SELECT departments.name
-FROM departments
-JOIN roles ON departments.name = roles.department;
+SELECT * FROM departments;
+
+SELECT roles.title, departments.name AS department, roles.salary
+FROM roles
+JOIN departments ON roles.department = departments.id;
+
+SELECT employees.first_name, employees.last_name, roles.title AS role, roles.salary AS salary, employees.manager
+FROM employees
+JOIN roles ON employees.role_id = roles.id;
