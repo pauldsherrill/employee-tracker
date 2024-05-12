@@ -12,21 +12,28 @@ const pool = new Pool({
     database: 'company_db',
 });
 
-inquirer.prompt([
-    {
-        type: 'list',
-        message: 'What would you like to do?',
-        name: 'action',
-        choices: ['View all departments', 'View all roles', 'View all employees', 'Add a department', 'Add a role', 'Add an employee', 'Update an employee role'],
-    }
-]).then((answers) => {
+function loadMainPrompts() {
+    inquirer.prompt([
+        {
+            type: 'list',
+            message: 'What would you like to do?',
+            name: 'action',
+            choices: ['View all departments', 'View all roles', 'View all employees', 'Add a department', 'Add a role', 'Add an employee', 'Update an employee role'],
+        }
+    ])
+}
+
+
+loadMainPrompts().then((answers) => {
     if (answers.action == 'View all departments') {
         pool.query('SELECT * FROM departments', function (err, {rows}) {
             console.log(rows);
-          });
+          }).then(() => {
+            loadMainPrompts();
+          })
     } else if (answers.action == 'View all roles') {
         pool.query('SELECT roles.title, departments.name AS department, roles.salary FROM roles JOIN departments ON roles.department = departments.id;', function (err, {rows}) {
-            console.log(rows);
+            console.log(rows);S
           });
     } else if (answers.action == 'View all employees') {
         pool.query('SELECT employees.first_name, employees.last_name, roles.title AS role, roles.salary AS salary, employees.manager FROM employees JOIN roles ON employees.role_id = roles.id;', function (err, {rows}) {
